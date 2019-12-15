@@ -1,0 +1,195 @@
+#Test with: http://editor.swagger.io/
+
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Microservice for Events
+  description: Sails.js + MongoDB
+  license:
+    name: Software Architecture, 2019-II
+host: localhost:1337
+basePath: /parchapp_events_ms/events
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /users:
+    post:
+      summary: Creates a new event
+      operationId: createEvent
+      parameters:
+        - name: event
+          in: body
+          required: true
+          description: Event Object
+          schema:
+            $ref: '#/definitions/UserInput'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+    get:
+      summary: Returns all Events
+      operationId: AllEvents
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/EventList'
+        '406':
+          description: Not Acceptable (Invalid Params)
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /users/{id}:
+    get:
+      summary: Returns an events with the given id
+      operationId: getEventById
+      parameters:
+        - name: id
+          in: path
+          description: The id of the Event to be returned
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/User'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    put:
+      summary: Updates an Event with the given id
+      operationId: updateEvent
+      parameters:
+        - name: id
+          in: path
+          description: The id of the Event to be updated
+          required: true
+          type: integer
+        - name: Event
+          in: body
+          required: true
+          description: User Object
+          schema:
+            $ref: '#/definitions/EventInput'
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    delete:
+      summary: Deletes an Event with the given id
+      operationId: deleteCEvent
+      parameters:
+        - name: id
+          in: path
+          description: The id of the Event to be deleted
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+definitions:
+
+  # Event
+  User:
+    type: object
+    properties:
+      _id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      location:
+        type: string
+      type:
+        type: string
+
+  EventInput:
+    type: object
+    properties:
+        type: string
+      description:
+        type: string
+      location:
+        type: string
+      type:
+        type: string
+
+  EventList:
+    type: object
+    required:
+      - total
+      - list
+    properties:
+      total:
+        type: number
+      list:
+        type: array
+        items:
+          $ref: '#/definitions/User'
+
+# Errors
+  ErrorModel:
+    type: object
+    required:
+      - message
+      - code
+    properties:
+      message:
+        type: string
+      code:
+        type: number
+      description:
+        type: object
