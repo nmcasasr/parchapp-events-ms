@@ -54,17 +54,9 @@ module.exports.datastores = {
   },
   parchapp_event_db: {
     adapter   : 'sails-mongo',
-    url      : 'mongodb://parchapp_event_db:27017?replicaSet=rs0',
-    database  : 'Events',
-    replSet: {
-  servers: [
-    {
-      host: 'parchapp_event_db',
-      port: 27017 // Will override port from default config (optional)
-    }
-  ],
-  options: {connectWithNoPrimary:true, rs_name:"rs0"} // See http://mongodb.github.io/node-mongodb-native/api-generated/replset.html (optional)
-}
+    host      : 'mongo',
+    port      : 27017,
+    database  : 'Events'
   }
 
 
