@@ -55,7 +55,7 @@ module.exports.datastores = {
   parchapp_event_db: {
     adapter   : 'sails-mongo',
     host      : process.env.mongo_db,
-    port      : 12017,
+    port      : process.env.port,
     database  : 'Events'
   }
 
